@@ -62,3 +62,8 @@ The software aims to contribute to the field of geology-focused tools by offerin
 ## 📈 Future Improvements
 
 Plans include the implementation of a rock image library featuring corresponding hand samples, thin sections, and, when possible, geochemical data. Each entry would be pre-classified and formally described, allowing users to compare their samples with reference examples.
+
+## Screenshots
+
+### Main interface
+![Main UI](Captura.PNG)
