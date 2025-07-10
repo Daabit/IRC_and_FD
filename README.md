@@ -70,3 +70,12 @@ Plans include the implementation of a rock image library featuring corresponding
 
 ### Product
 ![Main UI](Product.PNG)
+
+---
+## ⚠️ License Notice
+
+This software is licensed for **personal and non-commercial use only**.  
+Public presentation (e.g., conferences, classes, publications) and commercial use are **not allowed without written permission**.  
+Attribution to the author is required at all times.
+
+© 2025 David Absalón Lucero Acosta ("Daabit"). All rights reserved.
