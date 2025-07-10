@@ -78,4 +78,4 @@ This software is licensed for **personal and non-commercial use only**.
 Public presentation (e.g., conferences, classes, publications) and commercial use are **not allowed without written permission**.  
 Attribution to the author is required at all times.
 
-© 2025 David Absalón Lucero Acosta ("Daabit"). All rights reserved.
+© 2025 David Absalón Lucero Acosta. All rights reserved.
