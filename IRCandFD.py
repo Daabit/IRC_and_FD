@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import filedialog
 from tkinter import ttk
+from tkinter import messagebox
 import webbrowser
 
 #Clases
@@ -8,6 +9,9 @@ class App(Tk):
     
     def __init__(self):
         super().__init__()
+        
+        style = ttk.Style()
+        style.theme_use("vista")
         
         #Ventana de programa
         self.title("Igneous Rock Classifier & Formal Description")
@@ -98,15 +102,15 @@ class App(Tk):
                 text = self.thin_section_selection[index],
                 variable = self.thin_section_IV,
                 value = index,
-                command = lambda: [self.choose_thin_section_b(), self.choose_thin_section()])
+                command = lambda: [self.choose_thin_section_b(), self.choose_thin_section(), self.quartz_forced()])
             self.thin_section_rb.grid(row = 8, column = 0 + index)
 
-            self.thin_section_IV.set(0)
-            self.choose_thin_section_b() # Asigna self.intr_vs_effu con base en la opción por defecto, para que no aparezca None o [""] al procesar los datos.
-            self.choose_thin_section
+        self.thin_section_IV.set(0)
+        self.choose_thin_section_b() # Asigna self.intr_vs_effu con base en la opción por defecto, para que no aparezca None o [""] al procesar los datos.
+        self.choose_thin_section
 
         #Intrusive vs Effusive
-        self.intr_vs_effu = ttk.Label(self.gral_data_frame, text = "Your rock is intrusive or effusive?")
+        self.intr_vs_effu = ttk.Label(self.gral_data_frame, text = "Your rock is intrusive or effusive?", font = ("Helvetica", 10, "bold"))
         self.intr_vs_effu.grid(row = 11, column = 0, columnspan = 2)
         
         self.intr_vs_effu_IV = IntVar()
@@ -123,8 +127,8 @@ class App(Tk):
                 command = self.choose_intr_vs_effu)
             self.intr_vs_effu_rb.grid(row = 12, column = 0 + index)
             
-            self.intr_vs_effu_IV.set(0)
-            self.choose_intr_vs_effu()  # Asigna self.intr_vs_effu con base en la opción por defecto, para que no aparezca None o [""] al procesar los datos.
+        self.intr_vs_effu_IV.set(0)
+        self.choose_intr_vs_effu()  # Asigna self.intr_vs_effu con base en la opción por defecto, para que no aparezca None o [""] al procesar los datos.
             
         #2. Rock General Constitution
         self.gral_rock_constn_frame = ttk.Frame(self)
@@ -147,8 +151,8 @@ class App(Tk):
                                            command = self.choose_general_rock_constn)
             self.gral_rock_constn_rb.grid(row = 1 + index + 1, column=0, columnspan = 2, sticky = "w") # "index + 1" para que las opcines salgan verticales y no se solape con su respectivo label
         
-            self.gral_rock_constn_IV.set(0)
-            self.choose_general_rock_constn()  # Asigna self.rock_constn con base en la opción por defecto, para que no aparezca None o [""] al procesar los datos.
+        self.gral_rock_constn_IV.set(0)
+        self.choose_general_rock_constn()  # Asigna self.rock_constn con base en la opción por defecto, para que no aparezca None o [""] al procesar los datos.
         
         #3. Main texture and structures
         self.textr_struc_frame = ttk.Frame(self)
@@ -195,7 +199,7 @@ class App(Tk):
         self.qz_vs_fd = None
         
         for index in range(len(self.qz_vs_fd_selection)):
-            self.qz_vs_fd_rb = ttk.Radiobutton(
+            self.qz_vs_fd_rb = Radiobutton(
                 self.qz_vs_fd_frame,
                 text = self.qz_vs_fd_selection[index],
                 variable = self.qz_vs_fd_IV,
@@ -278,48 +282,48 @@ class App(Tk):
         
         self.af_thin = ttk.Label(self.req_minerals_thin_frame_fd, text = "Alkali feldspar:")
         self.af_thin.grid(row = 2, column = 0)
-        self.af_thin_entry = ttk.Entry(self.req_minerals_thin_frame_fd, width = 2)
-        self.af_thin_entry.grid(row = 2, column = 1)
+        self.af_thin_entry_fd = ttk.Entry(self.req_minerals_thin_frame_fd, width = 2)
+        self.af_thin_entry_fd.grid(row = 2, column = 1)
         
         self.pl_thin = ttk.Label(self.req_minerals_thin_frame_fd, text = "Plagioclase:")
         self.pl_thin.grid(row = 3, column = 0)
-        self.pl_thin_entry = ttk.Entry(self.req_minerals_thin_frame_fd, width = 2)
-        self.pl_thin_entry.grid(row = 3, column = 1)
+        self.pl_thin_entry_fd = ttk.Entry(self.req_minerals_thin_frame_fd, width = 2)
+        self.pl_thin_entry_fd.grid(row = 3, column = 1)
         
         self.ol_thin = ttk.Label(self.req_minerals_thin_frame_fd, text = "Olivine:")
         self.ol_thin.grid(row = 4, column = 0)
-        self.ol_thin_entry = ttk.Entry(self.req_minerals_thin_frame_fd, width = 2)
-        self.ol_thin_entry.grid(row = 4, column = 1)
+        self.ol_thin_entry_fd = ttk.Entry(self.req_minerals_thin_frame_fd, width = 2)
+        self.ol_thin_entry_fd.grid(row = 4, column = 1)
         
         self.clpx_thin = ttk.Label(self.req_minerals_thin_frame_fd, text = "Clinopyroxene:")
         self.clpx_thin.grid(row = 5, column = 0)
-        self.clpx_thin_entry = ttk.Entry(self.req_minerals_thin_frame_fd, width = 2)
-        self.clpx_thin_entry.grid(row = 5, column = 1)
+        self.clpx_thin_entry_fd = ttk.Entry(self.req_minerals_thin_frame_fd, width = 2)
+        self.clpx_thin_entry_fd.grid(row = 5, column = 1)
         
         self.orpx_thin = ttk.Label(self.req_minerals_thin_frame_fd, text = "Orthopyroxene:")
         self.orpx_thin.grid(row = 6, column = 0)
-        self.orpx_thin_entry = ttk.Entry(self.req_minerals_thin_frame_fd, width = 2)
-        self.orpx_thin_entry.grid(row = 6, column = 1)
+        self.orpx_thin_entry_fd = ttk.Entry(self.req_minerals_thin_frame_fd, width = 2)
+        self.orpx_thin_entry_fd.grid(row = 6, column = 1)
         
         self.amph_thin = ttk.Label(self.req_minerals_thin_frame_fd, text = "Amphibole:")
         self.amph_thin.grid(row = 7, column = 0)
-        self.amph_thin_entry = ttk.Entry(self.req_minerals_thin_frame_fd, width = 2)
-        self.amph_thin_entry.grid(row = 7, column = 1)
+        self.amph_thin_entry_fd = ttk.Entry(self.req_minerals_thin_frame_fd, width = 2)
+        self.amph_thin_entry_fd.grid(row = 7, column = 1)
         
         self.bt_thin = ttk.Label(self.req_minerals_thin_frame_fd, text = "Biotite:")
         self.bt_thin.grid(row = 8, column = 0)
-        self.bt_thin_entry = ttk.Entry(self.req_minerals_thin_frame_fd, width = 2)
-        self.bt_thin_entry.grid(row = 8, column = 1)
+        self.bt_thin_entry_fd = ttk.Entry(self.req_minerals_thin_frame_fd, width = 2)
+        self.bt_thin_entry_fd.grid(row = 8, column = 1)
         
         self.mzv_thin = ttk.Label(self.req_minerals_thin_frame_fd, text = "Muscovite:")
         self.mzv_thin.grid(row = 9, column = 0)
-        self.mzv_thin_entry = ttk.Entry(self.req_minerals_thin_frame_fd, width = 2)
-        self.mzv_thin_entry.grid(row = 9, column = 1)
+        self.mzv_thin_entry_fd = ttk.Entry(self.req_minerals_thin_frame_fd, width = 2)
+        self.mzv_thin_entry_fd.grid(row = 9, column = 1)
         
         self.ox_feti_thin = ttk.Label(self.req_minerals_thin_frame_fd, text = "Fe-Ti oxides:")
         self.ox_feti_thin.grid(row = 10, column = 0)
-        self.ox_feti_thin_entry = ttk.Entry(self.req_minerals_thin_frame_fd, width = 2)
-        self.ox_feti_thin_entry.grid(row = 10, column = 1)
+        self.ox_feti_thin_entry_fd = ttk.Entry(self.req_minerals_thin_frame_fd, width = 2)
+        self.ox_feti_thin_entry_fd.grid(row = 10, column = 1)
         
         #No thin section
         self.req_minerals_no_thin_frame = ttk.Frame(self)
@@ -373,8 +377,8 @@ class App(Tk):
                                            command = self.choose_emplacement_level)
             radiobutton_emplacement.grid(row = index + 1, column=0, sticky = "w") # "index + 1" para que las opcines salgan verticales y no se solape con su respectivo label
 
-            self.emplacement_level_IV.set(0)
-            self.choose_emplacement_level()  # Asigna self.emp_level con base en la opción por defecto, para que no aparezca None o [""] al procesar los datos.
+        self.emplacement_level_IV.set(0)
+        self.choose_emplacement_level()  # Asigna self.emp_level con base en la opción por defecto, para que no aparezca None o [""] al procesar los datos.
 
         #7. Alteration
         self.alteration_frame = ttk.Frame(self)
@@ -423,8 +427,8 @@ class App(Tk):
                                            command = self.choose_alteration_level)
             radiobutton_alteration_lvl.grid(row = index + 1, column = 0, sticky = "w") # "index + 1" para que las opcines salgan verticales y no se solape con su respectivo label
         
-            self.alteration_level_IV.set(0)
-            self.choose_alteration_level()  # Asigna self.alt_lvl con base en la opción por defecto, para que no aparezca None o [""] al procesar los datos.
+        self.alteration_level_IV.set(0)
+        self.choose_alteration_level()  # Asigna self.alt_lvl con base en la opción por defecto, para que no aparezca None o [""] al procesar los datos.
         
         #9. Observations
         self.observations_results_frame = ttk.Frame(self)
@@ -494,6 +498,12 @@ class App(Tk):
             self.hide_all_mineral_frames()
             self.req_minerals_no_thin_frame.grid(row = 0, column = 2, sticky = "n")
     
+    def quartz_forced(self):
+        if self.thin_section_IV.get() == 0:
+            self.qz_vs_fd_IV.set(0)  # Fuerza la selección a "Quartz" para que el frame de Required Minerals no desaparezca si se selecciona No en lamina delgada y luego se selecciona que si.
+            self.choose_qz_vs_fd()   # Asigna la variable self.qz_vs_fd
+            self.choose_qz_vs_fd_frame()  # Muestra el frame de minerales adecuado
+    
     def toggle_frame_state(self, frame, state):
         for child in frame.winfo_children():
             widget_type = child.winfo_class()
@@ -548,12 +558,6 @@ class App(Tk):
         elif(self.gral_rock_constn_IV.get() == 4):
             self.rock_constn = "Hypohialine"
     
-    def qapf_intrusive(self):
-        pass
-    
-    def qapf_effusive(self):
-        pass
-    
     def choose_emplacement_level(self):
         if(self.emplacement_level_IV.get() == 0):
             self.emp_level = "Plutonic"
@@ -579,6 +583,265 @@ class App(Tk):
         elif(self.alteration_level_IV.get() == 2):
             self.alt_lvl = "Strongly"
 
+    def qapf_thin_intr_qz(self):
+        try:
+            qz_n_thin = (int(self.qz_thin_entry.get()) * 100) / (int(self.af_thin_entry.get()) + int(self.pl_thin_entry.get()) + int(self.qz_thin_entry.get()))
+        except KeyError:
+            qz_n_thin = 0 # Valor por defecto si la clave no existe
+        try:
+            af_vs_pl = (int(self.af_thin_entry.get()) * 100) / (int(self.af_thin_entry.get()) + int(self.pl_thin_entry.get()))
+        except KeyError:
+            af_vs_pl = 0 # Valor por defecto si la clave no existe
+            
+        self.rock_name = "Undefined"  # Default value to avoid unbound error
+        if qz_n_thin >= 90:
+            self.rock_name = "Quarzolite"
+        elif qz_n_thin >= 60 and qz_n_thin < 90:
+            self.rock_name = "Quartz-rich granitoid"
+        elif qz_n_thin >= 20 and qz_n_thin < 60:
+            if af_vs_pl >= 90:
+                self.rock_name = "Alkali feldspar granite"
+            elif af_vs_pl >= 65 and af_vs_pl < 90:
+                self.rock_name = "Syenogranite"
+            elif af_vs_pl >= 35 and af_vs_pl < 65:
+                self.rock_name = "Monzogranite"
+            elif af_vs_pl >= 10 and af_vs_pl < 35:
+                self.rock_name = "Granodiorite"
+            elif af_vs_pl < 10:
+                self.rock_name = "Tonalite"
+        elif qz_n_thin >= 5 and qz_n_thin < 20:
+            if af_vs_pl >= 90:
+                self.rock_name = "Quartz alkali feldspar syenite"
+            elif af_vs_pl >= 65 and af_vs_pl < 90:
+                self.rock_name = "Quartz syenite"
+            elif af_vs_pl >= 35 and af_vs_pl < 65:
+                self.rock_name = "Quartz monzonite" 
+            elif af_vs_pl >= 10 and af_vs_pl < 35:
+                self.rock_name = "Quartz monzodiorite/Quartz monzogabbro"
+            elif af_vs_pl < 10:
+                self.rock_name = "Quartz diorite/Quartz gabbro/Quartz anorthosite"
+        elif qz_n_thin < 5 and qz_n_thin >= 0:
+            if af_vs_pl >= 90:
+                self.rock_name = "Alkali feldspar syenite"
+            elif af_vs_pl >= 65 and af_vs_pl < 90:
+                self.rock_name = "Syenite"
+            elif af_vs_pl >= 35 and af_vs_pl < 65:
+                self.rock_name = "Monzonite"
+            elif af_vs_pl >= 10 and af_vs_pl < 35:
+                self.rock_name = "Monzogabbro/Monzodiorite"
+            elif af_vs_pl < 10:
+                self.rock_name = "Diorite/Gabbro/Anorthosite"
+    
+    def qapf_thin_effu_qz(self):
+        try:
+            qz_n_thin = (int(self.qz_thin_entry.get()) * 100) / (int(self.af_thin_entry.get()) + int(self.pl_thin_entry.get()) + int(self.qz_thin_entry.get()))
+        except KeyError:
+            qz_n_thin = 0 # Valor por defecto si la clave no existe
+        try:
+            af_vs_pl = (int(self.af_thin_entry.get()) * 100) / (int(self.af_thin_entry.get()) + int(self.pl_thin_entry.get()))
+        except KeyError:
+            af_vs_pl = 0 # Valor por defecto si la clave no existe
+
+        self.rock_name = "Undefined"  # Default value to avoid unbound error
+        if qz_n_thin >= 90:
+            self.rock_name = "Undefined"
+        elif qz_n_thin >= 60 and qz_n_thin < 90:
+            self.rock_name = "Undefined"
+        elif qz_n_thin >= 20 and qz_n_thin < 60:
+            if af_vs_pl >= 90:
+                self.rock_name = "Alkali feldspar rhyolite"
+            elif af_vs_pl >= 35 and af_vs_pl < 90:
+                self.rock_name = "Rhyolite"
+            elif af_vs_pl < 35:
+                self.rock_name = "Dacite"
+        elif qz_n_thin >= 5 and qz_n_thin < 20:
+            if af_vs_pl >= 90:
+                self.rock_name = "Quartz alkali feldspar trachyte"
+            elif af_vs_pl >= 65 and af_vs_pl < 90:
+                self.rock_name = "Quartz trachyte"
+            elif af_vs_pl >= 35 and af_vs_pl < 65:
+                self.rock_name = "Quartz latite"
+            elif af_vs_pl < 35:
+                self.rock_name= "Basalt/Andesite"
+        elif qz_n_thin < 5:
+            if af_vs_pl >= 90:
+                self.rock_name = "Alkali feldspar trachyte"
+            elif af_vs_pl >= 65 and af_vs_pl < 90:
+                self.rock_name = "Trachyte"
+            elif af_vs_pl >= 35 and af_vs_pl < 65:
+                self.rock_name = "Latite"
+            elif af_vs_pl < 35:
+                self.rock_name = "Basalt/Andesite"
+        
+    def qapf_thin_intr_fd(self):
+        try:
+            fd_n_thin = (int(self.fd_thin_entry.get()) * 100) / (int(self.af_thin_entry.get()) + int(self.pl_thin_entry.get()) + int(self.fd_thin_entry.get()))
+        except KeyError:
+            fd_n_thin = 0 # Valor por defecto si la clave no existe
+        try:
+            af_vs_pl = (int(self.af_thin_entry_fd.get()) * 100) / (int(self.af_thin_entry_fd.get()) + int(self.pl_thin_entry_fd.get()))
+        except KeyError:
+            af_vs_pl = 0 # Valor por defecto si la clave no existe
+        
+        self.rock_name = "Undefined"
+        if fd_n_thin >= 90:
+            self.rock_name = "Foidolite"
+        elif fd_n_thin >= 60 and fd_n_thin < 90:
+            self.rock_name = "Foidolite"
+        elif fd_n_thin >= 10 and fd_n_thin < 60:
+            if af_vs_pl >= 90:
+                self.rock_name = "Foid syenite"
+            elif af_vs_pl >= 50 and af_vs_pl < 90:
+                self.rock_name = "Foid monzosyenite"
+            elif af_vs_pl >= 10 and af_vs_pl < 50:
+                self.rock_name = "Foid monzodiorite/Foid monzogabbro"
+            elif af_vs_pl < 10:
+                self.rock_name = "Foid diorite/Foid gabbro"
+        elif fd_n_thin < 10:
+            if af_vs_pl >= 90:
+                self.rock_name = "Foid-bearing alkali feldspar syenite"
+            elif af_vs_pl >= 65 and af_vs_pl < 90:
+                self.rock_name = "Foid-bearing syenite"
+            elif af_vs_pl >= 35 and af_vs_pl < 65:
+                self.rock_name = "Foid-bearing monzonite"
+            elif af_vs_pl >= 10 and af_vs_pl < 35:
+                self.rock_name = "Foid-bearing monzodiorite/Foid-bearing monzogabbro"
+            elif af_vs_pl < 10:
+                self.rock_name = "Foid-bearing diorite/Foid-bearing gabbro/Foid-bearing anorthosite"
+    
+    def qapf_thin_effu_fd(self):
+        try:
+            fd_n_thin = (int(self.fd_thin_entry.get()) * 100) / (int(self.af_thin_entry_fd.get()) + int(self.pl_thin_entry_fd.get()) + int(self.fd_thin_entry.get()))
+        except KeyError:
+            fd_n_thin = 0 # Valor por defecto si la clave no existe
+        try:
+            af_vs_pl = (int(self.af_thin_entry_fd.get()) * 100) / (int(self.af_thin_entry_fd.get()) + int(self.pl_thin_entry_fd.get()))
+        except KeyError:
+            af_vs_pl = 0 # Valor por defecto si la clave no existe
+            
+        self.rock_name = "Undefined"    
+        if fd_n_thin >= 90:
+            self.rock_name = "Foidite"
+        elif fd_n_thin >= 60 and fd_n_thin < 90:
+            if af_vs_pl >= 50:
+                self.rock_name = "Phonolitic foidite"
+            elif af_vs_pl <= 49:
+                self.rock_name = "Tephritic foidite"
+        elif fd_n_thin >= 10 and fd_n_thin < 60:
+            if af_vs_pl >= 90:
+                self.rock_name = "Phonolite"
+            elif af_vs_pl >= 50 and af_vs_pl < 90:
+                self.rock_name = "Tephritic phonolite"
+            elif af_vs_pl >= 10 and af_vs_pl < 50:
+                if int(self.ol_thin_entry_fd.get()) <= 10:
+                    self.rock_name = "Phonolitic tephrite"
+                elif int(self.ol_thin_entry_fd.get()) > 10:
+                    self.rock_name = "Phonolitic basanite"
+            elif af_vs_pl < 10:
+                if int(self.ol_thin_entry_fd.get()) <= 10:
+                    self.rock_name = "Tephrite"
+                elif int(self.ol_thin_entry_fd.get()) > 10:
+                    self.rock_name = "Basanite"
+        elif fd_n_thin < 10:
+            if af_vs_pl >= 90:
+                self.rock_name = "Foid-bearing alkali feldspar tachyte"
+            elif af_vs_pl >= 65 and af_vs_pl < 90:
+                self.rock_name = "Foid-bearing trachyte"
+            elif af_vs_pl >= 35 and af_vs_pl < 65:
+                self.rock_name = "Foid-bearing latite"
+            elif af_vs_pl < 35:
+                self.rock_name = "Basalt/Andesite"  
+    
+    def qapf_no_thin_intr_qz(self):
+        try:
+            qz_n_thin = (int(self.qz_no_thin_entry.get()) * 100) / (int(self.af_no_thin_entry.get()) + int(self.pl_no_thin_entry.get()) + int(self.qz_no_thin_entry.get()))
+        except KeyError:
+            qz_n_thin = 0 # Valor por defecto si la clave no existe
+        try:
+            af_vs_pl = (int(self.af_no_thin_entry.get()) * 100) / (int(self.af_no_thin_entry.get()) + int(self.pl_no_thin_entry.get()))
+        except KeyError:
+            af_vs_pl = 0 # Valor por defecto si la clave no existe
+    
+        self.rock_name = "Undefined"  # Default value to avoid unbound error
+        if qz_n_thin >= 90:
+            self.rock_name = "Quarzolite"
+        elif qz_n_thin >= 60 and qz_n_thin < 90:
+            self.rock_name = "Quarzolite"
+        elif qz_n_thin >= 20 and qz_n_thin < 60:
+            if af_vs_pl >= 90:
+                self.rock_name = "Alkali feldspar granite"
+            elif af_vs_pl >= 65 and af_vs_pl < 90:
+                self.rock_name = "Syenogranite"
+            elif af_vs_pl >= 35 and af_vs_pl < 65:
+                self.rock_name = "Monzogranite"
+            elif af_vs_pl >= 10 and af_vs_pl < 35:
+                self.rock_name = "Granodiorite"
+            elif af_vs_pl < 10:
+                self.rock_name = "Tonalite"
+        elif qz_n_thin >= 5 and qz_n_thin < 20:
+            if af_vs_pl >= 90:
+                self.rock_name = "Quartz alkali feldspar syenite"
+            elif af_vs_pl >= 65 and af_vs_pl < 90:
+                self.rock_name = "Quartz syenite"
+            elif af_vs_pl >= 35 and af_vs_pl < 65:
+                self.rock_name = "Quartz monzonite"
+            elif af_vs_pl >= 10 and af_vs_pl < 35:
+                self.rock_name = "Quartz monzodiorite/Quartz monzogabbro"
+            elif af_vs_pl < 10:
+                self.rock_name = "Quartz diorite/Quartz gabbro/Quartz anorthosite"
+        elif qz_n_thin < 5 and qz_n_thin >= 0:
+            if af_vs_pl >= 90:
+                self.rock_name = "Alkali feldspar syenite"
+            elif af_vs_pl >= 65 and af_vs_pl < 90:
+                self.rock_name = "Syenite"
+            elif af_vs_pl >= 35 and af_vs_pl < 65:
+                self.rock_name = "Monzonite"
+            elif af_vs_pl >= 10 and af_vs_pl < 35:
+                self.rock_name = "Monzogabbro/Monzodiorite"
+            elif af_vs_pl < 10:
+                self.rock_name = "Diorite/Gabbro/Anorthosite"    
+    
+    def qapf_no_thin_effu_qz(self):
+        try:
+            qz_n_thin = (int(self.qz_no_thin_entry.get()) * 100) / (int(self.af_no_thin_entry.get()) + int(self.pl_no_thin_entry.get()) + int(self.qz_no_thin_entry.get()))
+        except KeyError:
+            qz_n_thin = 0 # Valor por defecto si la clave no existe
+        try:
+            af_vs_pl = (int(self.af_no_thin_entry.get()) * 100) / (int(self.af_no_thin_entry.get()) + int(self.pl_no_thin_entry.get()))
+        except KeyError:
+            af_vs_pl = 0 # Valor por defecto si la clave no existe
+
+        self.rock_name = "Undefined"  # Default value to avoid unbound error
+        if qz_n_thin >= 90:
+            self.rock_name = "Undefined"
+        elif qz_n_thin >= 60 and qz_n_thin < 90:
+            self.rock_name = "Undefined"
+        elif qz_n_thin >= 20 and qz_n_thin < 60:
+            if af_vs_pl >= 90:
+                self.rock_name = "Alkali feldspar rhyolite"
+            elif af_vs_pl >= 35 and af_vs_pl < 90:
+                self.rock_name = "Rhyolite"
+            elif af_vs_pl < 35:
+                self.rock_name = "Dacite"
+        elif qz_n_thin >= 5 and qz_n_thin < 20:
+            if af_vs_pl >= 90:
+                self.rock_name = "Quartz alkali feldspar trachyte"
+            elif af_vs_pl >= 65 and af_vs_pl < 90:
+                self.rock_name = "Quartz trachyte"
+            elif af_vs_pl >= 35 and af_vs_pl < 65:
+                self.rock_name = "Quartz latite"
+            elif af_vs_pl < 35:
+                self.rock_name= "Basalt/Andesite"
+        elif qz_n_thin < 5:
+            if af_vs_pl >= 90:
+                self.rock_name = "Alkali feldspar trachyte"
+            elif af_vs_pl >= 65 and af_vs_pl < 90:
+                self.rock_name = "Trachyte"
+            elif af_vs_pl >= 35 and af_vs_pl < 65:
+                self.rock_name = "Latite"
+            elif af_vs_pl < 35:
+                self.rock_name = "Basalt/Andesite"            
+
     def submit_data(self):
         import tkinter as tk    #NO SE PORQUE TUVE QUE IMPORTAR ASI PERO SI NO LO HACIA NO FUNCIONABA EL insert()
         
@@ -599,9 +862,23 @@ class App(Tk):
         alt_lvl = self.alt_lvl
         emp_level = self.emp_level
         observations = self.observations_text.get("1.0", tk.END) #Esto permite copiar todo el texto del cuadro
+
+        if self.thin_section == "Yes" and self.rock_type == "Intrusive" and self.qz_vs_fd == "Quartz":
+            self.qapf_thin_intr_qz()
+        elif self.thin_section == "Yes" and self.rock_type == "Effusive" and self.qz_vs_fd == "Quartz":
+            self.qapf_thin_effu_qz()
+        elif self.thin_section == "Yes" and self.rock_type == "Intrusive" and self.qz_vs_fd == "Feldspathoids":
+            self.qapf_thin_intr_fd()
+        elif self.thin_section == "Yes" and self.rock_type == "Effusive" and self.qz_vs_fd == "Feldspathoids":
+            self.qapf_thin_effu_fd()
+        elif self.thin_section == "No" and self.rock_type == "Intrusive" and self.qz_vs_fd == "Quartz":
+            self.qapf_no_thin_intr_qz()
+        elif self.thin_section == "No" and self.rock_type == "Effusive" and self.qz_vs_fd == "Quartz":
+            self.qapf_no_thin_effu_qz()
+            
+        rock_name = self.rock_name
         
-        
-        sample_info = f"Sample code: {sample_code}\nSample location: {sample_location}\nAnalyst: {analyst}\nCoordinates: {east_coordinate}; {north_coordinate}\nThin section: {thin_section}\nRock type: {rock_type}\nRock general constitution: {rock_constn}\nTextures and structures: {textr_struc}\nHave Qz or Fd: {qz_vs_fd}\nAlteration: {alteration}\nAlteration level: {alt_lvl}\nEmplacement level: {emp_level}\nObservations: {observations}"
+        sample_info = f"Sample code: {sample_code}\nRock name: {rock_name}\nFormal description: {rock_constn} {rock_name} with {textr_struc} texture, {alt_lvl} {alteration} alteration, from a probable {emp_level} enviroment and the following observations: {observations}\n\nAll data\nSample location: {sample_location}\nAnalyst: {analyst}\nCoordinates: {east_coordinate}; {north_coordinate}\nThin section: {thin_section}\nRock type: {rock_type}\nRock general constitution: {rock_constn}\nTextures and structures: {textr_struc}\nHave Qz or Fd: {qz_vs_fd}\nEmplacement level: {emp_level}\nAlteration: {alteration}\nAlteration level: {alt_lvl}"
         
         self.info_box.insert(tk.END, sample_info)
         self.info_box.config(state = tk.DISABLED) #EVITA QUE SE PUEDA EDITAR EL TEXTO
