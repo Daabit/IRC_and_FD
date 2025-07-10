@@ -66,4 +66,7 @@ Plans include the implementation of a rock image library featuring corresponding
 ## Screenshots
 
 ### Main interface
-![Main UI](Captura.PNG)
+![Main UI](Main.PNG)
+
+### Product
+![Main UI](Product.PNG)
