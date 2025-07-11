@@ -165,7 +165,7 @@ class App(Tk):
         self.scrollbar_textr_struc = ttk.Scrollbar(self.textr_struc_frame, orient = VERTICAL)
         self.scrollbar_textr_struc.grid(row = 1, column = 1, sticky = "ns")
         
-        self.list_textr_struc = Listbox(self.textr_struc_frame, selectmode = MULTIPLE, exportselection = False, height = 9, yscrollcommand = self.scrollbar_textr_struc.set) #exportselection = False permite que no se deseleccionen elementos de otros checkbuttons
+        self.list_textr_struc = Listbox(self.textr_struc_frame, selectmode = MULTIPLE, exportselection = False, height = 7, yscrollcommand = self.scrollbar_textr_struc.set) #exportselection = False permite que no se deseleccionen elementos de otros checkbuttons
         self.list_textr_struc.grid(row = 1, column = 0, sticky = "ew")
 
         self.list_textr_struc.insert(1, "Amigdalar")
@@ -396,7 +396,7 @@ class App(Tk):
         
         self.emplacement_level_IV = IntVar()
         self.emplacement_level_selection = ["Plutonic", "Hypabyssal",
-                          "Subvolcanic"]
+                          "Subvolcanic", "Volcanic"]
 
         self.emp_level = None
         
@@ -422,7 +422,7 @@ class App(Tk):
         self.scrollbar_alterations = ttk.Scrollbar(self.alteration_frame, orient = VERTICAL)
         self.scrollbar_alterations.grid(row = 1, column = 1, sticky = "ns")        
         
-        self.list_alteration = Listbox(self.alteration_frame, selectmode = MULTIPLE, exportselection = False, height = 10, yscrollcommand = self.scrollbar_alterations.set)#exportselection = False permite que no se deseleccionen elementos de otros checkbuttons
+        self.list_alteration = Listbox(self.alteration_frame, selectmode = MULTIPLE, exportselection = False, height = 8, yscrollcommand = self.scrollbar_alterations.set)#exportselection = False permite que no se deseleccionen elementos de otros checkbuttons
         self.list_alteration.grid(row = 1, column = 0, sticky = "ew")
 
         self.list_alteration.insert(1, "ARGILLIC")
@@ -461,29 +461,30 @@ class App(Tk):
         add_new_alteration = ttk.Button(self.alteration_frame, text = "Add", command = lambda: [self.get_alteration(), self.add_alteration()])
         add_new_alteration.grid(row = 5, column = 0, sticky = "ew")
         
-        #8. Alteration level
-        self.alteration_level_frame = ttk.Frame(self)
-        self.alteration_level_frame.grid(row = 1, column = 3, sticky = "n", padx = 5, pady = 5)
+        #8. Alteration Localization
+        self.alteration_localization_frame = ttk.Frame(self)
+        self.alteration_localization_frame.grid(row = 1, column = 3, sticky = "n", padx = 5, pady = 5)
         
-        self.alteration_level = ttk.Label(self.alteration_level_frame, text = "8. ALTERATION\nLEVEL", font = ("Helvetica", 12, "bold"))
-        self.alteration_level.grid(row = 0, column = 0, sticky = "n")
+        self.alteration_localization = ttk.Label(self.alteration_localization_frame, text = "8. ALTERATION\nLOCALIZATION", font = ("Helvetica", 12, "bold"))
+        self.alteration_localization.grid(row = 0, column = 0, sticky = "n")
         
-        self.alteration_level_IV = IntVar()
-        self.alteration_level_selection = ["Weak", "Moderate",
-                          "Strongly"]
+        self.alteration_localization_IV = IntVar()
+        self.alteration_localization_selection = ["Surface", "Rim alteration",
+                          "Pervasive", "Selective", "Patchy", "Vein-related", "Fracture-controlled",
+                          "Disseminated"]
 
-        self.alt_lvl = None
+        self.alt_loc = None
 
-        for index in range(len(self.alteration_level_selection)):
-            radiobutton_alteration_lvl = ttk.Radiobutton(self.alteration_level_frame, 
-                                           text = self.alteration_level_selection[index],
-                                           variable = self.alteration_level_IV,
+        for index in range(len(self.alteration_localization_selection)):
+            radiobutton_alt_localization = ttk.Radiobutton(self.alteration_localization_frame, 
+                                           text = self.alteration_localization_selection[index],
+                                           variable = self.alteration_localization_IV,
                                            value = index,
-                                           command = self.choose_alteration_level)
-            radiobutton_alteration_lvl.grid(row = index + 1, column = 0, sticky = "w") # "index + 1" para que las opcines salgan verticales y no se solape con su respectivo label
+                                           command = self.choose_alteration_localization)
+            radiobutton_alt_localization.grid(row = index + 1, column = 0, sticky = "w") # "index + 1" para que las opcines salgan verticales y no se solape con su respectivo label
         
-        self.alteration_level_IV.set(0)
-        self.choose_alteration_level()  # Asigna self.alt_lvl con base en la opción por defecto, para que no aparezca None o [""] al procesar los datos.
+        self.alteration_localization_IV.set(0)
+        self.choose_alteration_localization()  # Asigna self.alt_lvl con base en la opción por defecto, para que no aparezca None o [""] al procesar los datos.
         
         #9. Observations
         self.observations_results_frame = ttk.Frame(self)
@@ -688,6 +689,8 @@ class App(Tk):
             self.emp_level = "Hypabyssal"
         elif(self.emplacement_level_IV.get() == 2):
             self.emp_level = "Subvolcanic"
+        elif(self.emplacement_level_IV.get() == 3):
+            self.emp_level = "Volcanic"
     
     def get_alteration(self):
         selected_indices_alt = self.list_alteration.curselection()
@@ -698,13 +701,23 @@ class App(Tk):
         self.list_alteration.config(height=self.list_alteration.size())
         self.new_alteration.delete(0, END)
     
-    def choose_alteration_level(self):
-        if(self.alteration_level_IV.get() == 0):
-            self.alt_lvl = "Weak"
-        elif(self.alteration_level_IV.get() == 1):
-            self.alt_lvl = "Moderate"
-        elif(self.alteration_level_IV.get() == 2):
-            self.alt_lvl = "Strongly"
+    def choose_alteration_localization(self):
+        if(self.alteration_localization_IV.get() == 0):
+            self.alt_loc = "Surface"
+        elif(self.alteration_localization_IV.get() == 1):
+            self.alt_loc = "Rim alteration"
+        elif(self.alteration_localization_IV.get() == 2):
+            self.alt_loc = "Pervasive"
+        elif(self.alteration_localization_IV.get() == 3):
+            self.alt_loc = "Selective"
+        elif(self.alteration_localization_IV.get() == 4):
+            self.alt_loc = "Patchy"
+        elif(self.alteration_localization_IV.get() == 5):
+            self.alt_loc = "Vein-related"
+        elif(self.alteration_localization_IV.get() == 6):
+            self.alt_loc = "Fracture-controlled"
+        elif(self.alteration_localization_IV.get() == 7):
+            self.alt_loc = "Disseminated"
 
     def qapf_thin_intr_qz(self):
         try:
@@ -982,7 +995,7 @@ class App(Tk):
         textr_struc = ", ".join(self.textr_struc_selected) if self.textr_struc_selected else "None selected" #Hace que aparezca en string en vez de "[Textura]"
         qz_vs_fd = self.qz_vs_fd
         alteration = ", ".join(self.alteration_selected) if self.alteration_selected else "None selected" #Hace que aparezca en string en vez de "[Alteration]"
-        alt_lvl = self.alt_lvl
+        alt_loc = self.alt_loc
         emp_level = self.emp_level
         observations = self.observations_text.get("1.0", tk.END) or "N/A" #Esto permite copiar todo el texto del cuadro
 
@@ -1005,7 +1018,7 @@ class App(Tk):
     f"Sample code: {sample_code}\n"
     f"Rock name: {rock_name}\n"
     f"Formal description: {rock_constn} {rock_name} with {textr_struc} texture, "
-    f"{alt_lvl} {alteration} alteration, from a probable {emp_level} environment "
+    f"{alt_loc} {alteration} alteration, from a probable {emp_level} environment "
     f"and the following observations: {observations}\n\n"
 
     f"All data\n"
@@ -1019,7 +1032,7 @@ class App(Tk):
     f"Have Qz or Fd: {qz_vs_fd}\n"
     f"Emplacement level: {emp_level}\n"
     f"Alteration: {alteration}\n"
-    f"Alteration level: {alt_lvl}"
+    f"Alteration localization: {alt_loc}"
 )
         
         self.info_box.insert(tk.END, sample_info)
