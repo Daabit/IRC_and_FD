@@ -1,8 +1,6 @@
-Personal Use License / Licencia de Uso Personal
+Personal Use License
 
 Copyright (c) 2025 David Absalón Lucero Acosta
-
-ENGLISH VERSION:
 
 This software is licensed for personal, non-commercial use only.
 
@@ -18,24 +16,15 @@ You are NOT allowed to:
 
 By using this software, you agree to these terms.
 
----
+Scientific Attribution:
 
-VERSIÓN EN ESPAÑOL:
+This software uses geological classification principles and terminology based on:
+- Streckeisen (1976), Le Maitre (2005), and the IUGS classification system.
 
-Este software se licencia para uso personal y no comercial exclusivamente.
+All scientific models referenced remain the intellectual property of their original authors. This project does not claim ownership over those models, only their independent implementation in code. The software is an original creation by the author, based on public geological classification standards and literature.
 
-Se permite:
-- Usar el software de manera privada en tu propio dispositivo.
-- Estudiar o modificar el código con fines de aprendizaje personal.
+This license applies exclusively to the original source code, interface, structure, and documentation of this software.
 
-NO se permite:
-- Utilizar este software o partes del mismo con fines comerciales.
-- Presentar o exhibir este software (o sus resultados) en contextos académicos, científicos o públicos (incluyendo congresos, publicaciones, talleres o concursos) sin permiso explícito y por escrito del autor.
-- Atribuirse la autoría o eliminar el crédito al autor original.
-- Redistribuir este software, modificado o no, sin autorización.
-
-Al usar este software, aceptas estos términos.
-
-Author / Autor: David Absalón Lucero Acosta
-Year / Año: 2025  
-All rights reserved / Todos los derechos reservados.
+Author: David Absalón Lucero Acosta  
+Year: 2025  
+All rights reserved.
