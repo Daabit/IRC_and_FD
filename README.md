@@ -66,10 +66,10 @@ Plans include the implementation of a rock image library featuring corresponding
 ## Screenshots
 
 ### Main interface
-![Main UI](Main.PNG)
+![Main UI](MainInterface.PNG)
 
 ### Product
-![Main UI](Product.PNG)
+![Main UI](MainProduct.PNG)
 
 ---
 
