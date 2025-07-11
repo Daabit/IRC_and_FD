@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import *
 from tkinter import filedialog
 from tkinter import ttk
+from tkinter import messagebox
 import webbrowser
 
 #Clases
@@ -215,7 +216,7 @@ class App(Tk):
         self.req_minerals_thin_frame = ttk.Frame(self)
         self.req_minerals_thin_frame.grid(row = 0, column = 2, sticky = "n", padx = 5, pady = 5)
 
-        self.req_minerals_thin = ttk.Label(self.req_minerals_thin_frame, text = "5. REQUIRED\nMINERALS", font = ("Helvetica", 12, "bold"))
+        self.req_minerals_thin = ttk.Label(self.req_minerals_thin_frame, text = "5. REQUIRED\nMINERALS(%)", font = ("Helvetica", 12, "bold"))
         self.req_minerals_thin.grid(row = 0, column = 0, columnspan = 2, sticky = "n")
         
         self.qz_thin = ttk.Label(self.req_minerals_thin_frame, text = "Quartz:")
@@ -280,7 +281,7 @@ class App(Tk):
         self.req_minerals_thin_frame_fd = ttk.Frame(self)
         self.req_minerals_thin_frame_fd.grid(row = 0, column = 2, sticky = "n", padx = 5, pady = 5)
 
-        self.req_minerals_thin = ttk.Label(self.req_minerals_thin_frame_fd, text = "5. REQUIRED\nMINERALS", font = ("Helvetica", 12, "bold"))
+        self.req_minerals_thin = ttk.Label(self.req_minerals_thin_frame_fd, text = "5. REQUIRED\nMINERALS(%)", font = ("Helvetica", 12, "bold"))
         self.req_minerals_thin.grid(row = 0, column = 0, columnspan = 2, sticky = "n")
         
         self.fd_thin_fd = ttk.Label(self.req_minerals_thin_frame_fd, text = "Feldspathoid:")
@@ -345,7 +346,7 @@ class App(Tk):
         self.req_minerals_no_thin_frame = ttk.Frame(self)
         self.req_minerals_no_thin_frame.grid(row = 0, column = 2, sticky = "n", padx = 5, pady = 5)
         
-        self.req_minerals_no_thin = ttk.Label(self.req_minerals_no_thin_frame, text = "5. REQUIRED\nMINERALS", font = ("Helvetica", 12, "bold"))
+        self.req_minerals_no_thin = ttk.Label(self.req_minerals_no_thin_frame, text = "5. REQUIRED\nMINERALS(%)", font = ("Helvetica", 12, "bold"))
         self.req_minerals_no_thin.grid(row = 0, column = 0, columnspan = 2, sticky = "n")
         
         self.qz_no_thin = ttk.Label(self.req_minerals_no_thin_frame, text = "Quartz:")
