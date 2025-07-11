@@ -72,6 +72,18 @@ Plans include the implementation of a rock image library featuring corresponding
 ![Main UI](Product.PNG)
 
 ---
+
+## 📚 References and Scientific Sources
+
+This software uses geological classification principles and terminology based on:
+- Streckeisen (1976), Le Maitre (2005), and the IUGS classification system.
+
+All scientific models referenced remain the intellectual property of their original authors. This project does not claim ownership over those models, only their independent implementation in code. The software is an original creation by the author, based on public geological classification standards and literature.
+
+This license applies exclusively to the original source code, interface, structure, and documentation of this software.
+
+---
+
 ## ⚠️ License Notice
 
 This software is licensed for **personal and non-commercial use only**.  
