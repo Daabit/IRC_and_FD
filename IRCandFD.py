@@ -2,7 +2,6 @@ import tkinter as tk
 from tkinter import *
 from tkinter import filedialog
 from tkinter import ttk
-from tkinter import messagebox
 import webbrowser
 
 #Clases
@@ -39,9 +38,10 @@ class App(Tk):
         self.edit_menu.add_command(label = "Copy", command = self.copy_text)
         self.edit_menu.add_command(label = "Paste", command = self.paste_text)
 
-        self.help_menu = Menu(self.menubar, tearoff = 0)
-        self.menubar.add_cascade(label = "Help", menu = self.help_menu)
-        self.help_menu.add_command(label = "About IRC & FD", command = self.create_window_about_IRC)
+        self.window_menu = Menu(self.menubar, tearoff = 0)
+        self.menubar.add_cascade(label = "Window", menu = self.window_menu)
+        self.window_menu.add_command(label = "Contact", command = self.create_window_contact)
+        self.window_menu.add_command(label = "About IRC & FD", command = self.create_window_about_IRC)
                 
         #WIDGETS
         
@@ -140,7 +140,7 @@ class App(Tk):
         
         self.gral_rock_constn_IV = IntVar()
         self.gral_rock_constn_selection = ["Coarse grain holocrystalline", "Medium grain holocrystalline",
-                          "Fine grain holocrystalline", "Hypocrystalline", "Hypohialline"]
+                          "Fine grain holocrystalline", "Hypocrystalline", "Hypohialline", "Holohialline"]
 
         self.rock_constn = None
 
@@ -155,36 +155,45 @@ class App(Tk):
         self.gral_rock_constn_IV.set(0)
         self.choose_general_rock_constn()  # Asigna self.rock_constn con base en la opción por defecto, para que no aparezca None o [""] al procesar los datos.
         
-        #3. Main texture and structures
+        #3. Main textures and structures
         self.textr_struc_frame = ttk.Frame(self)
         self.textr_struc_frame.grid(row = 0, column = 1, sticky = "n", padx = 5, pady = 5)
         
         self.textr_struc = ttk.Label(self.textr_struc_frame, text = "3. MAIN TEXTURES AND \nSTRUCTURES", font = ("Helvetica", 12, "bold")).grid(row = 0, column = 0)
         
-        self.list_textr_struc = Listbox(self.textr_struc_frame, selectmode = MULTIPLE, exportselection = False)#exportselection = False permite que no se deseleccionen elementos de otros checkbuttons
-        self.list_textr_struc.grid(row = 1, column = 0)
+        #Scrollbar Textures and structures
+        self.scrollbar_textr_struc = ttk.Scrollbar(self.textr_struc_frame, orient = VERTICAL)
+        self.scrollbar_textr_struc.grid(row = 1, column = 1, sticky = "ns")
+        
+        self.list_textr_struc = Listbox(self.textr_struc_frame, selectmode = MULTIPLE, exportselection = False, height = 9, yscrollcommand = self.scrollbar_textr_struc.set) #exportselection = False permite que no se deseleccionen elementos de otros checkbuttons
+        self.list_textr_struc.grid(row = 1, column = 0, sticky = "ew")
 
-        self.list_textr_struc.insert(1, "Porphyritic")
-        self.list_textr_struc.insert(2, "Glomerophyric")
-        self.list_textr_struc.insert(3, "Miarolitic")
-        self.list_textr_struc.insert(4, "Amigdalar")
-        self.list_textr_struc.insert(5, "Banded")
-        self.list_textr_struc.insert(6, "Laminar")
-        self.list_textr_struc.insert(7, "Masive")
-        self.list_textr_struc.insert(8, "Pegmatitic")
+        self.list_textr_struc.insert(1, "Amigdalar")
+        self.list_textr_struc.insert(2, "Banded")
+        self.list_textr_struc.insert(3, "Glomerophyric")
+        self.list_textr_struc.insert(4, "Laminar")
+        self.list_textr_struc.insert(5, "Masive")   
+        self.list_textr_struc.insert(6, "Miarolitic")    
+        self.list_textr_struc.insert(7, "Pegmatitic")
+        self.list_textr_struc.insert(8, "Porphyritic")
         self.list_textr_struc.insert(9, "Stratified-foliated")
+        self.list_textr_struc.insert(10, "Trachytic")
+        self.list_textr_struc.insert(11, "Vitrophyric")       
 
-        self.list_textr_struc.config(height=self.list_textr_struc.size()) #El tamaño de la caja se ajustará a la cantidad de items
+        #self.list_textr_struc.config(height=self.list_textr_struc.size()) #El tamaño de la caja se ajustará a la cantidad de items YA NO SE NECESITA PORQUE TIENE SCROLLBAR
+        
+        #Conect scroll with text widget: self.list_textr_struc
+        self.scrollbar_textr_struc.config(command = self.list_textr_struc.yview)        
         
         self.textr_struc_selected = None
         
         self.add_textr_struc = ttk.Entry(self.textr_struc_frame)
-        self.add_textr_struc.grid(row = 2, column = 0)
+        self.add_textr_struc.grid(row = 3, column = 0, sticky = "ew")
         
-        self.add_option_textr = ttk.Label(self.textr_struc_frame, text = "Add another option:").grid(row = 3, column = 0)
+        self.add_option_textr = ttk.Label(self.textr_struc_frame, text = "Add another option:").grid(row = 2, column = 0)
 
         self.add_textr_struc_bt = ttk.Button(self.textr_struc_frame, text = "Add", command = lambda: [self.get_textr_struc(),self.new_textr_struc()])
-        self.add_textr_struc_bt.grid(row = 4, column = 0)
+        self.add_textr_struc_bt.grid(row = 4, column = 0, sticky = "ew")
                 
         #4. Quartz or Feldspathoids
         self.qz_vs_fd_frame = ttk.Frame(self)
@@ -216,56 +225,56 @@ class App(Tk):
         self.req_minerals_thin_frame = ttk.Frame(self)
         self.req_minerals_thin_frame.grid(row = 0, column = 2, sticky = "n", padx = 5, pady = 5)
 
-        self.req_minerals_thin = ttk.Label(self.req_minerals_thin_frame, text = "5. REQUIRED\nMINERALS(%)", font = ("Helvetica", 12, "bold"))
+        self.req_minerals_thin = ttk.Label(self.req_minerals_thin_frame, text = "5. REQUIRED\nMINERALS (%)", font = ("Helvetica", 12, "bold"))
         self.req_minerals_thin.grid(row = 0, column = 0, columnspan = 2, sticky = "n")
         
         self.qz_thin = ttk.Label(self.req_minerals_thin_frame, text = "Quartz:")
-        self.qz_thin.grid(row = 1, column = 0)
+        self.qz_thin.grid(row = 1, column = 0, sticky = "w")
         self.qz_thin_entry = tk.Entry(self.req_minerals_thin_frame, width = 2)
         self.qz_thin_entry.grid(row = 1, column = 1)
         
         self.af_thin = ttk.Label(self.req_minerals_thin_frame, text = "Alkali feldspar:")
-        self.af_thin.grid(row = 2, column = 0)
+        self.af_thin.grid(row = 2, column = 0, sticky = "w")
         self.af_thin_entry = tk.Entry(self.req_minerals_thin_frame, width = 2)
         self.af_thin_entry.grid(row = 2, column = 1)
         
         self.pl_thin = ttk.Label(self.req_minerals_thin_frame, text = "Plagioclase:")
-        self.pl_thin.grid(row = 3, column = 0)
+        self.pl_thin.grid(row = 3, column = 0, sticky = "w")
         self.pl_thin_entry = tk.Entry(self.req_minerals_thin_frame, width = 2)
         self.pl_thin_entry.grid(row = 3, column = 1)
         
         self.ol_thin = ttk.Label(self.req_minerals_thin_frame, text = "Olivine:")
-        self.ol_thin.grid(row = 4, column = 0)
+        self.ol_thin.grid(row = 4, column = 0, sticky = "w")
         self.ol_thin_entry = tk.Entry(self.req_minerals_thin_frame, width = 2)
         self.ol_thin_entry.grid(row = 4, column = 1)
         
         self.clpx_thin = ttk.Label(self.req_minerals_thin_frame, text = "Clinopyroxene:")
-        self.clpx_thin.grid(row = 5, column = 0)
+        self.clpx_thin.grid(row = 5, column = 0, sticky = "w")
         self.clpx_thin_entry = tk.Entry(self.req_minerals_thin_frame, width = 2)
         self.clpx_thin_entry.grid(row = 5, column = 1)
         
         self.orpx_thin = ttk.Label(self.req_minerals_thin_frame, text = "Orthopyroxene:")
-        self.orpx_thin.grid(row = 6, column = 0)
+        self.orpx_thin.grid(row = 6, column = 0, sticky = "w")
         self.orpx_thin_entry = tk.Entry(self.req_minerals_thin_frame, width = 2)
         self.orpx_thin_entry.grid(row = 6, column = 1)
         
         self.amph_thin = ttk.Label(self.req_minerals_thin_frame, text = "Amphibole:")
-        self.amph_thin.grid(row = 7, column = 0)
+        self.amph_thin.grid(row = 7, column = 0, sticky = "w")
         self.amph_thin_entry = tk.Entry(self.req_minerals_thin_frame, width = 2)
         self.amph_thin_entry.grid(row = 7, column = 1)
         
         self.bt_thin = ttk.Label(self.req_minerals_thin_frame, text = "Biotite:")
-        self.bt_thin.grid(row = 8, column = 0)
+        self.bt_thin.grid(row = 8, column = 0, sticky = "w")
         self.bt_thin_entry = tk.Entry(self.req_minerals_thin_frame, width = 2)
         self.bt_thin_entry.grid(row = 8, column = 1)
         
         self.mzv_thin = ttk.Label(self.req_minerals_thin_frame, text = "Muscovite:")
-        self.mzv_thin.grid(row = 9, column = 0)
+        self.mzv_thin.grid(row = 9, column = 0, sticky = "w")
         self.mzv_thin_entry = tk.Entry(self.req_minerals_thin_frame, width = 2)
         self.mzv_thin_entry.grid(row = 9, column = 1)
         
         self.ox_feti_thin = ttk.Label(self.req_minerals_thin_frame, text = "Fe-Ti oxides:")
-        self.ox_feti_thin.grid(row = 10, column = 0)
+        self.ox_feti_thin.grid(row = 10, column = 0, sticky = "w")
         self.ox_feti_thin_entry = tk.Entry(self.req_minerals_thin_frame, width = 2)
         self.ox_feti_thin_entry.grid(row = 10, column = 1)
         
@@ -281,56 +290,56 @@ class App(Tk):
         self.req_minerals_thin_frame_fd = ttk.Frame(self)
         self.req_minerals_thin_frame_fd.grid(row = 0, column = 2, sticky = "n", padx = 5, pady = 5)
 
-        self.req_minerals_thin = ttk.Label(self.req_minerals_thin_frame_fd, text = "5. REQUIRED\nMINERALS(%)", font = ("Helvetica", 12, "bold"))
+        self.req_minerals_thin = ttk.Label(self.req_minerals_thin_frame_fd, text = "5. REQUIRED\nMINERALS (%)", font = ("Helvetica", 12, "bold"))
         self.req_minerals_thin.grid(row = 0, column = 0, columnspan = 2, sticky = "n")
         
         self.fd_thin_fd = ttk.Label(self.req_minerals_thin_frame_fd, text = "Feldspathoid:")
-        self.fd_thin_fd.grid(row = 1, column = 0)
+        self.fd_thin_fd.grid(row = 1, column = 0, sticky = "w")
         self.fd_thin_entry = tk.Entry(self.req_minerals_thin_frame_fd, width = 2)
         self.fd_thin_entry.grid(row = 1, column = 1)
         
         self.af_thin = ttk.Label(self.req_minerals_thin_frame_fd, text = "Alkali feldspar:")
-        self.af_thin.grid(row = 2, column = 0)
+        self.af_thin.grid(row = 2, column = 0, sticky = "w")
         self.af_thin_entry_fd = tk.Entry(self.req_minerals_thin_frame_fd, width = 2)
         self.af_thin_entry_fd.grid(row = 2, column = 1)
         
         self.pl_thin = ttk.Label(self.req_minerals_thin_frame_fd, text = "Plagioclase:")
-        self.pl_thin.grid(row = 3, column = 0)
+        self.pl_thin.grid(row = 3, column = 0, sticky = "w")
         self.pl_thin_entry_fd = tk.Entry(self.req_minerals_thin_frame_fd, width = 2)
         self.pl_thin_entry_fd.grid(row = 3, column = 1)
         
         self.ol_thin = ttk.Label(self.req_minerals_thin_frame_fd, text = "Olivine:")
-        self.ol_thin.grid(row = 4, column = 0)
+        self.ol_thin.grid(row = 4, column = 0, sticky = "w")
         self.ol_thin_entry_fd = tk.Entry(self.req_minerals_thin_frame_fd, width = 2)
         self.ol_thin_entry_fd.grid(row = 4, column = 1)
         
         self.clpx_thin = ttk.Label(self.req_minerals_thin_frame_fd, text = "Clinopyroxene:")
-        self.clpx_thin.grid(row = 5, column = 0)
+        self.clpx_thin.grid(row = 5, column = 0, sticky = "w")
         self.clpx_thin_entry_fd = tk.Entry(self.req_minerals_thin_frame_fd, width = 2)
         self.clpx_thin_entry_fd.grid(row = 5, column = 1)
         
         self.orpx_thin = ttk.Label(self.req_minerals_thin_frame_fd, text = "Orthopyroxene:")
-        self.orpx_thin.grid(row = 6, column = 0)
+        self.orpx_thin.grid(row = 6, column = 0, sticky = "w")
         self.orpx_thin_entry_fd = tk.Entry(self.req_minerals_thin_frame_fd, width = 2)
         self.orpx_thin_entry_fd.grid(row = 6, column = 1)
         
         self.amph_thin = ttk.Label(self.req_minerals_thin_frame_fd, text = "Amphibole:")
-        self.amph_thin.grid(row = 7, column = 0)
+        self.amph_thin.grid(row = 7, column = 0, sticky = "w")
         self.amph_thin_entry_fd = tk.Entry(self.req_minerals_thin_frame_fd, width = 2)
         self.amph_thin_entry_fd.grid(row = 7, column = 1)
         
         self.bt_thin = ttk.Label(self.req_minerals_thin_frame_fd, text = "Biotite:")
-        self.bt_thin.grid(row = 8, column = 0)
+        self.bt_thin.grid(row = 8, column = 0, sticky = "w")
         self.bt_thin_entry_fd = tk.Entry(self.req_minerals_thin_frame_fd, width = 2)
         self.bt_thin_entry_fd.grid(row = 8, column = 1)
         
         self.mzv_thin = ttk.Label(self.req_minerals_thin_frame_fd, text = "Muscovite:")
-        self.mzv_thin.grid(row = 9, column = 0)
+        self.mzv_thin.grid(row = 9, column = 0, sticky = "w")
         self.mzv_thin_entry_fd = tk.Entry(self.req_minerals_thin_frame_fd, width = 2)
         self.mzv_thin_entry_fd.grid(row = 9, column = 1)
         
         self.ox_feti_thin = ttk.Label(self.req_minerals_thin_frame_fd, text = "Fe-Ti oxides:")
-        self.ox_feti_thin.grid(row = 10, column = 0)
+        self.ox_feti_thin.grid(row = 10, column = 0, sticky = "w")
         self.ox_feti_thin_entry_fd = tk.Entry(self.req_minerals_thin_frame_fd, width = 2)
         self.ox_feti_thin_entry_fd.grid(row = 10, column = 1)
         
@@ -346,26 +355,26 @@ class App(Tk):
         self.req_minerals_no_thin_frame = ttk.Frame(self)
         self.req_minerals_no_thin_frame.grid(row = 0, column = 2, sticky = "n", padx = 5, pady = 5)
         
-        self.req_minerals_no_thin = ttk.Label(self.req_minerals_no_thin_frame, text = "5. REQUIRED\nMINERALS(%)", font = ("Helvetica", 12, "bold"))
+        self.req_minerals_no_thin = ttk.Label(self.req_minerals_no_thin_frame, text = "5. REQUIRED\nMINERALS (%)", font = ("Helvetica", 12, "bold"))
         self.req_minerals_no_thin.grid(row = 0, column = 0, columnspan = 2, sticky = "n")
         
         self.qz_no_thin = ttk.Label(self.req_minerals_no_thin_frame, text = "Quartz:")
-        self.qz_no_thin.grid(row = 1, column = 0)
+        self.qz_no_thin.grid(row = 1, column = 0, sticky = "w")
         self.qz_no_thin_entry = tk.Entry(self.req_minerals_no_thin_frame, width = 2)
         self.qz_no_thin_entry.grid(row = 1, column = 1)
         
         self.af_no_thin = ttk.Label(self.req_minerals_no_thin_frame, text = "Alkali feldspar:")
-        self.af_no_thin.grid(row = 2, column = 0)
+        self.af_no_thin.grid(row = 2, column = 0, sticky = "w")
         self.af_no_thin_entry = tk.Entry(self.req_minerals_no_thin_frame, width = 2)
         self.af_no_thin_entry.grid(row = 2, column = 1)
         
         self.pl_no_thin = ttk.Label(self.req_minerals_no_thin_frame, text = "Plagioclase:")
-        self.pl_no_thin.grid(row = 3, column = 0)
+        self.pl_no_thin.grid(row = 3, column = 0, sticky = "w")
         self.pl_no_thin_entry = tk.Entry(self.req_minerals_no_thin_frame, width = 2)
         self.pl_no_thin_entry.grid(row = 3, column = 1)
         
         self.m_no_thin = ttk.Label(self.req_minerals_no_thin_frame, text = "M:")
-        self.m_no_thin.grid(row = 4, column = 0)
+        self.m_no_thin.grid(row = 4, column = 0, sticky = "w")
         self.m_no_thin_entry = tk.Entry(self.req_minerals_no_thin_frame, width = 2)
         self.m_no_thin_entry.grid(row = 4, column = 1)
         
@@ -387,7 +396,7 @@ class App(Tk):
         
         self.emplacement_level_IV = IntVar()
         self.emplacement_level_selection = ["Plutonic", "Hypabyssal",
-                          "Hypovolcanic"]
+                          "Subvolcanic"]
 
         self.emp_level = None
         
@@ -409,24 +418,48 @@ class App(Tk):
         self.alteration = ttk.Label(self.alteration_frame, text = "7. ALTERATION", font = ("Helvetica", 12, "bold"))
         self.alteration.grid(row = 0, column = 0)
         
-        self.list_alteration = Listbox(self.alteration_frame, selectmode = MULTIPLE, exportselection = False)#exportselection = False permite que no se deseleccionen elementos de otros checkbuttons
+        #Scrollbar Alterations
+        self.scrollbar_alterations = ttk.Scrollbar(self.alteration_frame, orient = VERTICAL)
+        self.scrollbar_alterations.grid(row = 1, column = 1, sticky = "ns")        
+        
+        self.list_alteration = Listbox(self.alteration_frame, selectmode = MULTIPLE, exportselection = False, height = 10, yscrollcommand = self.scrollbar_alterations.set)#exportselection = False permite que no se deseleccionen elementos de otros checkbuttons
         self.list_alteration.grid(row = 1, column = 0, sticky = "ew")
 
-        self.list_alteration.insert(1, "Silicification")
-        self.list_alteration.insert(2, "Oxidation")
-        self.list_alteration.insert(3, "Propylite")
-        self.list_alteration.insert(4, "Clayey")
-        self.list_alteration.insert(5, "Calcareous")
+        self.list_alteration.insert(1, "ARGILLIC")
+        self.list_alteration.insert(2, "ARGILLIC ADV.(aln+kaol+qz)")
+        self.list_alteration.insert(3, "PHYLLIC(ser+qz+py)")
+        self.list_alteration.insert(4, "POTASSIC(kfs+bi)")
+        self.list_alteration.insert(5, "PROPYLITIC(chl+alb+epi+carb)")
+        self.list_alteration.insert(6, "Albitic")
+        self.list_alteration.insert(7, "Alunitic")
+        self.list_alteration.insert(8, "Biotitic")
+        self.list_alteration.insert(9, "Carbonatic")
+        self.list_alteration.insert(10, "Chloritic")
+        self.list_alteration.insert(11, "Epidotic")
+        self.list_alteration.insert(12, "Illitic")
+        self.list_alteration.insert(13, "Kaolinitic")
+        self.list_alteration.insert(14, "Oxidation")
+        self.list_alteration.insert(15, "Potassic")
+        self.list_alteration.insert(16, "Pyritic")
+        self.list_alteration.insert(17, "Sericitic")
+        self.list_alteration.insert(18, "Silicic")
+        self.list_alteration.insert(19, "Smectitic")
+        
+        #self.list_alteration.config(height=self.list_alteration.size()) #El tamaño de la caja se ajustará a la cantidad de items
 
-        self.list_alteration.config(height=self.list_alteration.size()) #El tamaño de la caja se ajustará a la cantidad de items
+        #Conect scroll with text widget: self.list_textr_struc
+        self.scrollbar_alterations.config(command = self.list_alteration.yview)     
 
         self.alteration_selected = None
         
+        self.add_option_alt = ttk.Label(self.alteration_frame, text = "Add another option:")
+        self.add_option_alt.grid(row = 3, column = 0)
+        
         self.new_alteration = ttk.Entry(self.alteration_frame)
-        self.new_alteration.grid(row = 3, column = 0, sticky = "ew")
+        self.new_alteration.grid(row = 4, column = 0, sticky = "ew")
 
         add_new_alteration = ttk.Button(self.alteration_frame, text = "Add", command = lambda: [self.get_alteration(), self.add_alteration()])
-        add_new_alteration.grid(row = 4, column = 0, sticky = "ew")
+        add_new_alteration.grid(row = 5, column = 0, sticky = "ew")
         
         #8. Alteration level
         self.alteration_level_frame = ttk.Frame(self)
@@ -476,15 +509,15 @@ class App(Tk):
         self.save_analysis_button.grid(row= 2, column = 1)
         
         #Scroll Sample Info
-        self.scrollbar = ttk.Scrollbar(self.observations_results_frame, orient = VERTICAL)
-        self.scrollbar.grid(row = 1, column = 2, sticky = "ns")
+        self.scrollbar_info = ttk.Scrollbar(self.observations_results_frame, orient = VERTICAL)
+        self.scrollbar_info.grid(row = 1, column = 2, sticky = "ns")
         
         #Sample Info
-        self.info_box = Text(self.observations_results_frame, width = 70, height = 10, yscrollcommand = self.scrollbar.set)
+        self.info_box = Text(self.observations_results_frame, width = 70, height = 10, yscrollcommand = self.scrollbar_info.set)
         self.info_box.grid(row = 1, column = 1, sticky = "n")
         
         #Conect scroll with text widget: self.info_box
-        self.scrollbar.config(command = self.info_box.yview)
+        self.scrollbar_info.config(command = self.info_box.yview)
         
         #Creación de los atajos del teclado después de la creación de todos los widgets que lo utilicen
         self.bind_all("<Control-z>", lambda event: self.undo_text())
@@ -497,20 +530,69 @@ class App(Tk):
     def new_window_IRC(self):
         self.new_window = App()
     
-    def create_window_about_IRC(self):
+    def create_window_contact(self):
         import tkinter as tk
         from tkinter import ttk
         url = "https://www.linkedin.com/in/daabluac/"
         def open_linkedin():
             webbrowser.open(url)
-        self.window_about_IRC = Toplevel()
-        self.window_about_IRC.title("About IRC & FD")
-        self.window_about_IRC.config(width = 500, height = 500)
-        ttk.Label(self.window_about_IRC, text = "Contact", font = ("Arial", 10, "bold")).grid(row = 0, column = 0, sticky = "w")
-        ttk.Label(self.window_about_IRC, text = "Author: David Lucero").grid(row = 1, column = 0, sticky = "w")
-        ttk.Label(self.window_about_IRC, text = "Email: daabluac@gmail.com").grid(row = 2, column = 0, sticky = "w")
-        ttk.Button(self.window_about_IRC, text = "LinkedIn", command = open_linkedin).grid(row = 3, column = 0)
-        ttk.Button(self.window_about_IRC, text = "Ok", command = self.window_about_IRC.destroy).grid(row = 4, column = 0)
+        self.window_contact = Toplevel()
+        self.window_contact.title("Contact")
+        self.window_contact.config(width = 500, height = 500)
+        ttk.Label(self.window_contact, text = "Contact", font = ("Arial", 10, "bold")).grid(row = 0, column = 0, sticky = "w")
+        ttk.Label(self.window_contact, text = "Author: David Absalón Lucero Acosta").grid(row = 1, column = 0, sticky = "w")
+        ttk.Label(self.window_contact, text = "Email: daabluac@gmail.com").grid(row = 2, column = 0, sticky = "w")
+        ttk.Button(self.window_contact, text = "LinkedIn", command = open_linkedin).grid(row = 3, column = 0)
+        ttk.Button(self.window_contact, text = "Okay", command = self.window_contact.destroy).grid(row = 4, column = 0)
+    
+    def create_window_about_IRC(self):
+        # Crear ventana Toplevel
+        about_window = tk.Toplevel(self)
+        about_window.title("About IRC & FD")
+        about_window.geometry("600x400")
+        about_window.resizable(True, True)
+
+        # Frame principal para el contenido
+        content_frame = ttk.Frame(about_window, padding=10)
+        content_frame.pack(fill="both", expand=True)
+
+        # Scrollbar vertical
+        scrollbar = ttk.Scrollbar(content_frame)
+        scrollbar.pack(side="right", fill="y")
+
+        # Widget Text (licencia)
+        license_text = tk.Text(content_frame, wrap="word", yscrollcommand=scrollbar.set)
+        license_text.pack(side="left", fill="both", expand=True)
+        scrollbar.config(command=license_text.yview)
+
+        # Texto de la licencia (puedes reemplazarlo con el texto completo real)
+        license_content = (
+            "Personal Use License\n"
+            "Copyright (c) 2025 David Absalón Lucero Acosta\n\n"
+            "This software is licensed for personal, non-commercial use only.\n\n"
+            "You are allowed to:\n"
+            "- Use the software privately on your own device for academic and research purposes.\n\n"
+            "You are NOT allowed to:\n"
+            "- Use this software or its components for commercial purposes.\n"
+            "- Present or exhibit this software or its outputs in academic, scientific, or public contexts (including conferences, publications, workshops, or competitions) without the explicit written permission of the author.\n"
+            "- Claim authorship or remove attribution from the original work.\n"
+            "- Redistribute this software, modified or unmodified, without permission.\n\n"
+            "By using this software, you agree to these terms.\n\n"
+            "Scientific Attribution:\n\n"
+            "This software uses geological classification principles and terminology based on:\n"
+            "- Streckeisen (1976), Le Maitre (2005), and the IUGS classification system.\n\n"
+            "All scientific models referenced remain the intellectual property of their original authors. This project does not claim ownership over those models, only their independent implementation in code. The software is an original creation by the author, based on public geological classification standards and literature.\n\n"
+            "This license applies exclusively to the original source code, interface, structure, and documentation of this software.\n\n"
+            "Author: David Absalón Lucero Acosta\n"
+            "Year: 2025\n"
+            "All rights reserved.\n"
+        )
+
+        # Insertar el texto
+        license_text.insert("1.0", license_content)
+
+        # Desactivar edición del usuario
+        license_text.config(state="disabled")
     
     def choose_thin_section_b(self):
         if(self.thin_section_IV.get() == 0):
@@ -605,7 +687,7 @@ class App(Tk):
         elif(self.emplacement_level_IV.get() == 1):
             self.emp_level = "Hypabyssal"
         elif(self.emplacement_level_IV.get() == 2):
-            self.emp_level = "Hipovolcanic"
+            self.emp_level = "Subvolcanic"
     
     def get_alteration(self):
         selected_indices_alt = self.list_alteration.curselection()
